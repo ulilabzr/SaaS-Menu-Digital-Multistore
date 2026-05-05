@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('code')->unique();
             $table->string('name');
-            $table->string('slug');
+            $table->integer('table_number');
+            $table->enum('payment_method',['cash', 'midtrans']);
+            $table->decimal('total_price', 10, 2);
+            $table->enum('status', ['pending', 'paid', 'failed']);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('transactions');
     }
 };
