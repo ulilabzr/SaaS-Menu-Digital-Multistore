@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\ProductCategories;
+namespace App\Filament\Resources\Products;
 
-use App\Filament\Resources\ProductCategories\Pages\CreateProductCategory;
-use App\Filament\Resources\ProductCategories\Pages\EditProductCategory;
-use App\Filament\Resources\ProductCategories\Pages\ListProductCategories;
-use App\Filament\Resources\ProductCategories\Schemas\ProductCategoryForm;
-use App\Filament\Resources\ProductCategories\Tables\ProductCategoriesTable;
-use App\Models\ProductCategory;
+use App\Filament\Resources\Products\Pages\CreateProduct;
+use App\Filament\Resources\Products\Pages\EditProduct;
+use App\Filament\Resources\Products\Pages\ListProducts;
+use App\Filament\Resources\Products\Schemas\ProductForm;
+use App\Filament\Resources\Products\Tables\ProductsTable;
+use App\Models\Product;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -19,12 +19,14 @@ use Illuminate\Support\Facades\Auth;
 use Override;
 use UnitEnum;
 
-class ProductCategoryResource extends Resource
+class ProductResource extends Resource
 {
-    protected static ?string $model = ProductCategory::class;
+    protected static ?string $model = Product::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
-    protected static string|null $navigationLabel = 'Product Categories Management';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::ShoppingBag;
+
+    protected static string|null $navigationLabel = 'Product Management';
+
     protected static string|UnitEnum|null $navigationGroup = 'Menu Management';
 
     #[Override]
@@ -42,12 +44,12 @@ class ProductCategoryResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return ProductCategoryForm::configure($schema);
+        return ProductForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return ProductCategoriesTable::configure($table);
+        return ProductsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -60,9 +62,9 @@ class ProductCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListProductCategories::route('/'),
-            'create' => CreateProductCategory::route('/create'),
-            'edit' => EditProductCategory::route('/{record}/edit'),
+            'index' => ListProducts::route('/'),
+            'create' => CreateProduct::route('/create'),
+            'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
 
