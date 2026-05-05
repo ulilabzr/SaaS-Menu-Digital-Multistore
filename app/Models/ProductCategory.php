@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProductCategory extends Model
 {
@@ -14,6 +16,7 @@ class ProductCategory extends Model
         'user_id',
         'name',
         'slug',
+        'icon',
     ];
 
     // Define the relationship with the User model
@@ -25,5 +28,25 @@ class ProductCategory extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    
+    public static function boot(){
+        parent::boot();
+
+        static::creating(function ($model) {
+            if(Auth::user()->role === 'store') {
+                $model->user_id = Auth::id();
+            }
+
+            $model->slug = Str::slug($model->name);
+        });
+
+        static::updating(function ($model) {
+            if(Auth::user()->role === 'store') {
+                $model->user_id = Auth::id();
+            }
+
+            $model->slug = Str::slug($model->name);
+        });
     }
 }

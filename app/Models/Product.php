@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -31,5 +33,24 @@ class Product extends Model
         public function transactionDetails()
     {
         return $this->hasMany(TransactionDetail::class);
+    }
+
+    public static function boot(){
+        parent::boot();
+
+        static::creating(function ($model) {
+            if(Auth::user()->role === 'store') {
+                $model->user_id = Auth::id();
+            }
+
+            
+        });
+
+        static::updating(function ($model) {
+            if(Auth::user()->role === 'store') {
+                $model->user_id = Auth::id();
+            }
+
+        });
     }
 }
